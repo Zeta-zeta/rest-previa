@@ -2,16 +2,14 @@ services:
   mysql:
     image: mysql:8.0.33
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: soapserver
-      MYSQL_USER: root
-      MYSQL_PASSWORD: 123456
+      MYSQL_DATABASE: rest-prueba
+      MYSQL_ROOT_PASSWORD: 123456
     ports:
       - "3306:3306"
-  soapserver:
+  rest-prueba:
     build: .
     ports:
-      - "8080:8080"
+      - "8099:8099"
     depends_on:
       - mysql
     environment:
