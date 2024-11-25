@@ -6,8 +6,7 @@ services:
       MYSQL_ROOT_PASSWORD: 123456
     ports:
       - "3306:3306"
-    networks:
-      - app-network
+
   ec3movies:
     build: .
     ports:
@@ -19,8 +18,3 @@ services:
       DB_PORT: 3306
       DB_USERNAME: root
       DB_PASSWORD: 123456
-    networks:
-      - app-network
-networks:
-  app-network:
-    driver: bridge
