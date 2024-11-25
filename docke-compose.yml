@@ -6,7 +6,7 @@ services:
       MYSQL_ROOT_PASSWORD: 123456
     ports:
       - "3306:3306"
-  restprueba:
+  ec3movies:
     build: .
     ports:
       - "8099:8099"
