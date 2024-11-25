@@ -1,6 +1,6 @@
 services:
   mysql:
-    image: mysql:8.0.33
+    image: mysql:latest
     environment:
       MYSQL_DATABASE: ec3movies
       MYSQL_ROOT_PASSWORD: 123456
