@@ -9,7 +9,6 @@ FROM openjdk:17-jdk-slim
 
 COPY --from=compile /usr/src/app/target/*.jar /usr/app/app.jar
 
-
 WORKDIR /usr/app
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
