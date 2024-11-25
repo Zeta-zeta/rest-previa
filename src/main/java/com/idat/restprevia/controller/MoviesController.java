@@ -42,7 +42,7 @@ public class MoviesController {
             Movie movie = moviesRepository.findByName(name);
             if(movie!=null){
                 String json = objectMapper.writeValueAsString(movie);
-                return Response.ok(json, MediaType.APPLICATION_JSON).build();
+                return Response.ok("Pelicula encontrada\n"+json, MediaType.APPLICATION_JSON).build();
             }
             return Response.status(Response.Status.NOT_FOUND).entity("Pelicula no encontrada").type(MediaType.TEXT_PLAIN).build();
         } catch (JsonProcessingException e){
@@ -61,7 +61,7 @@ public class MoviesController {
             moviesRepository.save(movie);
             String newjson = objectMapper.writeValueAsString(movie);
             return Response.status(Response.Status.CREATED)
-                    .entity(newjson)
+                    .entity("Película creada correctamente")
                     .type(MediaType.APPLICATION_JSON)
                     .build();
         } catch (JsonProcessingException e){
@@ -78,7 +78,10 @@ public class MoviesController {
         Movie movie = moviesRepository.findByName(name);
         if (movie != null) {
             moviesRepository.delete(movie);
-            return Response.ok(movie, MediaType.APPLICATION_JSON).build();
+            return Response.status(Response.Status.OK)
+                    .entity("Pelicula eliminada correctamente")
+                    .type(MediaType.APPLICATION_JSON)
+                    .build();
         }
         return Response.status(Response.Status.NOT_FOUND)
                 .entity("Pelicula no encontrada")
@@ -98,35 +101,18 @@ public class MoviesController {
             // Buscar la película existente por su nombre (clave primaria)
             Movie movie = moviesRepository.findByName(name);
 
-            // Si no existe la película, devolver error 404
-            if (movie == null) {
-                return Response.status(Response.Status.NOT_FOUND)
-                        .entity("Pelicula no encontrada con el nombre: " + name)
+            if (movie != null) {
+                movie.setCategory(updateMovie.getName());
+                movie.setYear(updateMovie.getYear());
+                movie.setOrigin_country(updateMovie.getOrigin_country());
+                moviesRepository.save(movie);
+
+                return Response.status(Response.Status.OK)
+                        .entity("Pelicula actualizada correctamente")
+                        .type(MediaType.APPLICATION_JSON)
                         .build();
             }
-
-            // Si el 'name' de la película recibida es diferente al actual, manejar este cambio
-            if (!movie.getName().equals(updateMovie.getName())) {
-                // Aquí podrías verificar si el nuevo nombre ya existe, para evitar duplicados
-                Movie existingMovie = moviesRepository.findByName(updateMovie.getName());
-                if (existingMovie != null) {
-                    return Response.status(Response.Status.BAD_REQUEST)
-                            .entity("Ya existe una película con el nombre: " + updateMovie.getName())
-                            .build();
-                }
-
-            }
-
-            // Actualizar los demás campos de la película
-            movie.setCategory(updateMovie.getCategory());
-            movie.setYear(updateMovie.getYear());
-            movie.setOrigin_country(updateMovie.getOrigin_country());
-
-            // Guardar los cambios en el repositorio (la entidad se debe actualizar, no insertar una nueva)
-            moviesRepository.save(movie);
-
-            // Devolver la película actualizada
-            return Response.ok(movie, MediaType.APPLICATION_JSON).build();
+            return Response.status(Response.Status.NOT_FOUND).entity("Pelicula no encontrada").build();
         } catch (JsonProcessingException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Error al convertir a JSON")
