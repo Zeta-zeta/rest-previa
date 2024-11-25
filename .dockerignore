@@ -2,7 +2,6 @@
 target
 .gitattributes
 .git
-.idea
 .vscode
 *.md
 *.class
