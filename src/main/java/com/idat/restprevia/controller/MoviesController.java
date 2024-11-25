@@ -102,7 +102,7 @@ public class MoviesController {
             Movie movie = moviesRepository.findByName(name);
 
             if (movie != null) {
-                movie.setCategory(updateMovie.getName());
+                movie.setCategory(updateMovie.getCategory());
                 movie.setYear(updateMovie.getYear());
                 movie.setOrigin_country(updateMovie.getOrigin_country());
                 moviesRepository.save(movie);
