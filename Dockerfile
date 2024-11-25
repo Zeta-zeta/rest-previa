@@ -1,14 +1,11 @@
-FROM maven:3.8.1-openjdk-17 as compile
-
-COPY . /usr/src/app
+# Etapa 1: Construcción
+FROM maven:3.8.1-openjdk-17 AS compile
 WORKDIR /usr/src/app
+COPY . .
+RUN mvn clean package -DskipTests
 
-RUN mvn clean package -DskipTests -X
-
+# Etapa 2: Ejecución
 FROM openjdk:17-jdk-slim
-
-COPY --from=compile /usr/src/app/target/*.jar /usr/app/app.jar
-
 WORKDIR /usr/app
-
+COPY --from=compile /usr/src/app/target/*.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
